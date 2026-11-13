@@ -37,3 +37,40 @@ def _parse_match_date(value):
 
 def _years_between(later, earlier):
     return (later - earlier).days / 365.25
+
+
+def _opponent_age(row, match_date):
+    value = str(row[16]).strip()
+    if re.fullmatch(r"\d{8}", value):
+        birth_date = pd.to_datetime(value, format="%Y%m%d")
+        return _years_between(match_date, birth_date)
+    try:
+        return float(value)
+    except ValueError:
+        return float("nan")
+
+
+def _result_label(value):
+    return "won" if str(value).upper() == "W" else "lost"
+
+
+def _row_to_record(row, player_birth_date):
+    match_date = _parse_match_date(row[0])
+    player_age = _years_between(match_date, player_birth_date)
+    opponent_age = _opponent_age(row, match_date)
+    return {
+        "date_match": match_date,
+        "tournament": row[1],
+        "surface": row[2],
+        "age_player": player_age,
+        "age_opponent": opponent_age,
+        "age_diff": player_age - opponent_age,
+        "opponent": row[11],
+        "result": _result_label(row[4]),
+    }
+
+
+def _build_dataframe(rows, player_birth_date):
+    records = [_row_to_record(row, player_birth_date) for row in rows]
+    data = pd.DataFrame(records)
+    return data.dropna(subset=["date_match", "age_player", "age_opponent"])
