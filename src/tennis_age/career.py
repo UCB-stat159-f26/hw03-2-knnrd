@@ -104,3 +104,26 @@ def get_career_matches(player_name):
         ) from exc
     birth_date = _birth_date_from_player_pages(slug)
     return _build_dataframe(rows, birth_date)
+
+
+def _parse_birth_date_text(text):
+    patterns = [
+        r"\((\d{2}-[A-Za-z]{3}-\d{4})\)",
+        r"(\d{4}-\d{2}-\d{2})",
+        r"(\d{8})",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return pd.to_datetime(match.group(1), errors="coerce")
+    return None
+
+
+def _birth_date_from_player_pages(slug):
+    paths = ["player-classic.cgi", "wplayer-classic.cgi"]
+    for path in paths:
+        url = f"{BASE_URL}/cgi-bin/{path}?p={slug}"
+        birth_date = _parse_birth_date_text(_download_text(url))
+        if birth_date is not None and not pd.isna(birth_date):
+            return birth_date
+    raise ValueError("Player date of birth could not be determined.")
