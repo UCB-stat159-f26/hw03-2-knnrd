@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 
 import pandas as pd
 import requests
@@ -19,9 +20,14 @@ def _normalize_player_name(name):
 
 
 def _download_text(url):
-    response = requests.get(url, headers=HEADERS, timeout=20)
+    for attempt in range(3):
+        response = requests.get(url, headers=HEADERS, timeout=20)
+        if response.status_code != 429:
+            response.raise_for_status()
+            return response.text
+        if attempt < 2:
+            time.sleep(2 ** attempt)
     response.raise_for_status()
-    return response.text
 
 
 def _extract_match_rows(js_text):
