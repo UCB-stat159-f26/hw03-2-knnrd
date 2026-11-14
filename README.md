@@ -1,4 +1,3 @@
-```markdown
 # HW3: Tennis Career Package
 
 ## About
@@ -164,4 +163,3 @@ I also got more practice writing automated tests that do not depend on a live we
 Another thing I learned was how important error handling is when creating a package for other users. While testing the package with real players, Tennis Abstract sometimes rate limited requests. Handling request failures and trying alternate player-page endpoints made the package more reliable and gave me more experience dealing with issues that can happen when working with external websites and APIs.
 
 Overall, this assignment helped me understand package structure, public and private functions, automated testing, reusable code, and how to make an analysis workflow work for more than one specific example.
-```
