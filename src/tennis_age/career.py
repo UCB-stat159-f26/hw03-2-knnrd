@@ -123,7 +123,11 @@ def _birth_date_from_player_pages(slug):
     paths = ["player-classic.cgi", "wplayer-classic.cgi"]
     for path in paths:
         url = f"{BASE_URL}/cgi-bin/{path}?p={slug}"
-        birth_date = _parse_birth_date_text(_download_text(url))
+        try:
+            text = _download_text(url)
+        except requests.RequestException:
+            continue
+        birth_date = _parse_birth_date_text(text)
         if birth_date is not None and not pd.isna(birth_date):
             return birth_date
     raise ValueError("Player date of birth could not be determined.")
