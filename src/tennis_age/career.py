@@ -74,3 +74,33 @@ def _build_dataframe(rows, player_birth_date):
     records = [_row_to_record(row, player_birth_date) for row in rows]
     data = pd.DataFrame(records)
     return data.dropna(subset=["date_match", "age_player", "age_opponent"])
+
+
+def _slug_candidates(player_name):
+    compact = _normalize_player_name(player_name)
+    words = re.findall(r"[A-Za-z0-9]+", player_name)
+    title_slug = "".join(word.capitalize() for word in words)
+    return list(dict.fromkeys([compact, title_slug]))
+
+
+def _fetch_career_js(player_name):
+    for slug in _slug_candidates(player_name):
+        url = f"{BASE_URL}/jsmatches/{slug}Career.js"
+        try:
+            return slug, _download_text(url)
+        except requests.RequestException:
+            continue
+    raise ValueError(f"No Tennis Abstract career data found for '{player_name}'.")
+
+
+def get_career_matches(player_name):
+    """Return cleaned career match data for a Tennis Abstract player."""
+    slug, js_text = _fetch_career_js(player_name)
+    try:
+        rows = _extract_match_rows(js_text)
+    except ValueError as exc:
+        raise ValueError(
+            f"No Tennis Abstract career data found for '{player_name}'."
+        ) from exc
+    birth_date = _birth_date_from_player_pages(slug)
+    return _build_dataframe(rows, birth_date)
