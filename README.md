@@ -152,14 +152,8 @@ Contains the automated tests.
 
 ## Reflection
 
-This assignment helped me understand the difference between writing a script for one specific analysis and building a package that should work for different users and inputs.
+This assignment helped me understand the difference between writing a script for one specific analysis and building a package that should work for different users and inputs. In HW2 I only needed to process Serena Williams's career data, but for he3 I had to separate the workflow into smaller reusable parts for downloading data, parsing the JS files, cleaning the results, calculating ages, and plotting
 
-In HW2, I only needed to process Serena Williams's career data. For HW3, I had to separate the workflow into smaller reusable parts for downloading data, parsing the JS files, cleaning the results, calculating ages, and plotting. This made the code more modular and made it easier to test individual pieces separately.
-
-The difference between male and female Tennis Abstract career files was also important. Female-player files contain opponent birth dates, while male-player files already contain opponent ages. I learned that when working with real data, two files that look like they contain the same type of information can still require different processing steps.
-
-I also got more practice writing automated tests that do not depend on a live website. Using mock JS content makes the tests faster and more reproducible because they do not depend on Tennis Abstract being available during testing.
-
-Another thing I learned was how important error handling is when creating a package for other users. While testing the package with real players, Tennis Abstract sometimes rate limited requests. Handling request failures and trying alternate player-page endpoints made the package more reliable and gave me more experience dealing with issues that can happen when working with external websites and APIs.
+The difference between male and female Tennis Abstract career files was also important. Female-player files contain opponent birth dates, while male-player files already contain opponent ages. I learned that when working with real data, two files that look like they contain the same type of information can still require different processing steps. I also got more practice writing automated tests that do not depend on a live website. Using mock JS content makes the tests faster and more reproducible  because they do not depend on Tennis Abstract being available during testing.
 
 Overall, this assignment helped me understand package structure, public and private functions, automated testing, reusable code, and how to make an analysis workflow work for more than one specific example.
