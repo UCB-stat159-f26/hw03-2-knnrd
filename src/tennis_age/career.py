@@ -126,7 +126,12 @@ def _parse_birth_date_text(text):
 
 
 def _birth_date_from_player_pages(slug):
-    paths = ["player-classic.cgi", "wplayer-classic.cgi"]
+    paths = [
+        "player.cgi",
+        "wplayer.cgi",
+        "player-classic.cgi",
+        "wplayer-classic.cgi",
+    ]
     for path in paths:
         url = f"{BASE_URL}/cgi-bin/{path}?p={slug}"
         try:
